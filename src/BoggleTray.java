@@ -89,17 +89,22 @@ public class BoggleTray {
 	public boolean isNeighbor(char first, char next, char[][] board) {
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[0].length; col++) {
+				
+				
 				for (int i = row - 1; i < row + 2 && i < board.length; i++) {
 					for (int j = col - 1; j < col + 2 && j < board[0].length; j++) {
+						
 						if (i >= 0 && j >= 0) {
 							if (board[i][j] == next && board[row][col] == first) {
 								return true;
 							}
-
 						}
+						
 					}
 
 				}
+				
+				
 			}
 		}
 		return false;
