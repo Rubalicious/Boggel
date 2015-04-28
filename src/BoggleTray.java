@@ -21,8 +21,13 @@ public class BoggleTray {
 	// Note: This method does NOT check to see if the word is in the list of
 	// words.
 	public boolean foundInBoggleTray(String str) {
-		char[][] temp = tray;
-		str.toUpperCase();
+		char[][] temp = new char[4][4];
+		for (int i = 0; i <4; i ++){
+			for (int j = 0; j <4; j++){
+				temp[i][j] = tray[i][j];
+			}
+		}
+		str = str.toUpperCase();
 		int i = 0;
 		int j = 0;
 		if (str.length() == 0)
@@ -108,6 +113,17 @@ public class BoggleTray {
 			}
 		}
 		return false;
+	}
+	
+	public String toString(){
+		String result = "";
+		for (int i = 0; i <4; i ++){
+			for (int j = 0; j <4; j++){
+				result+=""+tray[i][j];
+			}
+			result+="\n";
+		}
+		return result;
 	}
 
 }

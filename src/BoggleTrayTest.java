@@ -18,7 +18,9 @@ public class BoggleTrayTest {
   public void testStringFindWhenThereStartingInUpperLeftCorner() {
     BoggleTray bt = new BoggleTray(tray);
     assertTrue(bt.foundInBoggleTray("ABC"));  
+    //System.out.println (bt.toString());
     assertTrue(bt.foundInBoggleTray("abC"));  // Must be case insensitive
+    //System.out.println (""+tray[0][0]+tray[0][1]+ tray[0][2]);
     assertTrue(bt.foundInBoggleTray("aBf"));
     assertTrue(bt.foundInBoggleTray("abc"));
     assertTrue(bt.foundInBoggleTray("ABCD"));
@@ -26,6 +28,22 @@ public class BoggleTrayTest {
     assertTrue(bt.foundInBoggleTray("ABFEJINM"));
     assertTrue(bt.foundInBoggleTray("AbCdHgFeIjKLpONm"));
     assertTrue(bt.foundInBoggleTray("ABCDHLPOKJNMIEFG"));
+  }
+  
+  @Test
+  public void testStringFindWhenStartingElseWhere() {
+    BoggleTray bt = new BoggleTray(tray);
+    assertTrue(bt.foundInBoggleTray("ABC"));  
+    //System.out.println (bt.toString());
+    assertTrue(bt.foundInBoggleTray("abC"));  // Must be case insensitive
+    //System.out.println (""+tray[0][0]+tray[0][1]+ tray[0][2]);
+    assertTrue(bt.foundInBoggleTray("aBf"));
+    assertTrue(bt.foundInBoggleTray("abc"));
+    assertTrue(bt.foundInBoggleTray("ABCD"));
+    // ... 
+    assertTrue(bt.foundInBoggleTray("IFJkplh"));
+    assertTrue(bt.foundInBoggleTray("GcDHLPok"));
+    assertTrue(bt.foundInBoggleTray("kjfghlponmieabcd"));
   }
 
   @Test
