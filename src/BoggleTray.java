@@ -1,4 +1,3 @@
-
 // by Irene Moreno and Ruby Abrams
 public class BoggleTray {
 	private char[][] tray;
@@ -22,8 +21,8 @@ public class BoggleTray {
 	// words.
 	public boolean foundInBoggleTray(String str) {
 		char[][] temp = new char[4][4];
-		for (int i = 0; i <4; i ++){
-			for (int j = 0; j <4; j++){
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
 				temp[i][j] = tray[i][j];
 			}
 		}
@@ -33,6 +32,7 @@ public class BoggleTray {
 		if (str.length() == 0)
 			return false;
 		while (i < 4) {
+			j = 0;
 			while (j < 4) { // iterate through the [][]array
 				if (temp[i][j] == str.charAt(0))
 					if (find(i, j, str, temp))
@@ -47,15 +47,28 @@ public class BoggleTray {
 	// this method will tell us if the entire string (ref) is
 	// found in the [][] array
 	public boolean find(int i, int j, String ref, char[][] board) {
-		if (ref.length() == 0)
+		char[][] temp = new char[4][4];
+		for (int r = 0; r < 4; r++) {
+			for (int c = 0; c < 4; c++) {
+				temp[r][c] = board[r][c];
+			}
+		}
+		if (ref.length() == 0) {
+			board = tray;
 			return true;
-		char temp = board[i][j];
+		}
+		if (i == -1 || j == -1)
+			return false;
+		char letter = board[i][j];
+		if (letter == 'Q')
+			return find(i, j, ref.substring(1), board);
 		if (ref.length() == 1) {
 			return true;
 		}
-		if (ref.charAt(0) == temp) { // the position of the first
+		if (ref.charAt(0) == letter) { // the position of the first
 		// character
-			if (isNeighbor(temp, ref.charAt(1), board)) { // check to see if the
+			if (isNeighbor(letter, ref.charAt(1), board)) { // check to see if
+			// the
 			// second character
 			// is a neighbor
 				board[i][j] = ' '; // change to blank space
@@ -94,34 +107,30 @@ public class BoggleTray {
 	public boolean isNeighbor(char first, char next, char[][] board) {
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[0].length; col++) {
-				
-				
 				for (int i = row - 1; i < row + 2 && i < board.length; i++) {
 					for (int j = col - 1; j < col + 2 && j < board[0].length; j++) {
-						
 						if (i >= 0 && j >= 0) {
 							if (board[i][j] == next && board[row][col] == first) {
 								return true;
 							}
 						}
-						
+
 					}
 
 				}
-				
-				
+
 			}
 		}
 		return false;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		String result = "";
-		for (int i = 0; i <4; i ++){
-			for (int j = 0; j <4; j++){
-				result+=""+tray[i][j];
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				result += "" + tray[i][j];
 			}
-			result+="\n";
+			result += "\n";
 		}
 		return result;
 	}

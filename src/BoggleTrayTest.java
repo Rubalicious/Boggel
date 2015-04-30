@@ -13,6 +13,11 @@ public class BoggleTrayTest {
       {'E', 'F', 'G', 'H' },
       {'I', 'J', 'K', 'L' }, 
       {'M', 'N', 'O', 'P' } };
+  private char[][] tray2 = {   // Always use upper case letters in the dice tray
+	      {'A', 'B', 'C', 'D' }, 
+	      {'E', 'F', 'G', 'H' },
+	      {'I', 'J', 'Q', 'L' }, 
+	      {'M', 'N', 'O', 'P' } };
 
   @Test
   public void testStringFindWhenThereStartingInUpperLeftCorner() {
@@ -33,17 +38,15 @@ public class BoggleTrayTest {
   @Test
   public void testStringFindWhenStartingElseWhere() {
     BoggleTray bt = new BoggleTray(tray);
-    assertTrue(bt.foundInBoggleTray("ABC"));  
-    //System.out.println (bt.toString());
-    assertTrue(bt.foundInBoggleTray("abC"));  // Must be case insensitive
-    //System.out.println (""+tray[0][0]+tray[0][1]+ tray[0][2]);
-    assertTrue(bt.foundInBoggleTray("aBf"));
-    assertTrue(bt.foundInBoggleTray("abc"));
-    assertTrue(bt.foundInBoggleTray("ABCD"));
-    // ... 
+    assertTrue(bt.foundInBoggleTray("BCD"));  
     assertTrue(bt.foundInBoggleTray("IFJkplh"));
     assertTrue(bt.foundInBoggleTray("GcDHLPok"));
     assertTrue(bt.foundInBoggleTray("kjfghlponmieabcd"));
+  }
+  @Test
+  public void testWordsThatHaveAQU(){
+	  BoggleTray bt = new BoggleTray(tray2);
+	  assertTrue(bt.foundInBoggleTray("QUON"));
   }
 
   @Test
@@ -58,8 +61,10 @@ public class BoggleTrayTest {
   public void testStringFindWhenAttemptIsMadeToUseALetterTwice () {
     BoggleTray bt = new BoggleTray(tray);
     assertFalse(bt.foundInBoggleTray("ABA"));
+    System.out.println(bt.toString());
     assertFalse(bt.foundInBoggleTray("ABB"));
     assertFalse(bt.foundInBoggleTray("aEa"));
+    assertFalse(bt.foundInBoggleTray("Bab"));
     // ... 
   }
   
