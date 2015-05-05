@@ -5,7 +5,7 @@
 //
 import static org.junit.Assert.*;
 import org.junit.Test;
-
+//Ruby Abrams and Irene Moreno
 public class BoggleTrayTest {
 
   private char[][] tray = {   // Always use upper case letters in the dice tray
@@ -48,6 +48,17 @@ public class BoggleTrayTest {
 	  BoggleTray bt = new BoggleTray(tray2);
 	  assertTrue(bt.foundInBoggleTray("QUON"));
   }
+  
+  @Test
+  public void testSearchForMoss(){
+	  char[][] tray3 = {{'M','O','S','E'},
+			  			{'D','A','L','N'}, 
+			  			{'T','O','P','D'}, 
+			  			{'S','S','E','N'}};
+	  BoggleTray bt = new BoggleTray(tray3);
+	  assertFalse(bt.foundInBoggleTray("Moss"));
+	  System.out.println(bt.toString());
+  }
 
   @Test
   public void testStringFindWhenNotThere () {
@@ -68,40 +79,40 @@ public class BoggleTrayTest {
     // ... 
   }
   
-  @Test
-  public void testIsNeighbor(){
-	  BoggleTray bt = new BoggleTray(tray);
-	  assertTrue(bt.isNeighbor('A', 'F', tray));
-	  assertTrue(bt.isNeighbor('B', 'F', tray));
-	  assertTrue(bt.isNeighbor('C', 'F', tray));
-	  
-	  assertTrue(bt.isNeighbor('E', 'F', tray));
-	  assertTrue(bt.isNeighbor('G', 'F', tray));
-	  
-	  assertTrue(bt.isNeighbor('I', 'F', tray));
-	  assertTrue(bt.isNeighbor('J', 'F', tray));
-	  assertTrue(bt.isNeighbor('K', 'F', tray));
-  }
-  
-  @Test
-  public void testIsNeighborWhenCornerPiece(){
-	  BoggleTray bt = new BoggleTray(tray);
-	  assertTrue(bt.isNeighbor('A', 'B', tray));
-	  assertTrue(bt.isNeighbor('A', 'E', tray));
-	  assertTrue(bt.isNeighbor('A', 'F', tray));
-  }
-  
-  @Test
-  public void testIsNeighborWhenFalse(){
-	  BoggleTray bt = new BoggleTray(tray);
-	  assertFalse(bt.isNeighbor('A', 'C', tray));
-  }
-
-  @Test
-  public void testFind(){
-	  BoggleTray bt = new BoggleTray(tray);
-	  assertTrue(bt.find(0,0,"A", tray));
-  }
+//  @Test
+//  public void testIsNeighbor(){
+//	  BoggleTray bt = new BoggleTray(tray);
+//	  assertTrue(bt.isNeighbor('A', 'F', tray));
+//	  assertTrue(bt.isNeighbor('B', 'F', tray));
+//	  assertTrue(bt.isNeighbor('C', 'F', tray));
+//	  
+//	  assertTrue(bt.isNeighbor('E', 'F', tray));
+//	  assertTrue(bt.isNeighbor('G', 'F', tray));
+//	  
+//	  assertTrue(bt.isNeighbor('I', 'F', tray));
+//	  assertTrue(bt.isNeighbor('J', 'F', tray));
+//	  assertTrue(bt.isNeighbor('K', 'F', tray));
+//  }
+//  
+//  @Test
+//  public void testIsNeighborWhenCornerPiece(){
+//	  BoggleTray bt = new BoggleTray(tray);
+//	  assertTrue(bt.isNeighbor('A', 'B', tray));
+//	  assertTrue(bt.isNeighbor('A', 'E', tray));
+//	  assertTrue(bt.isNeighbor('A', 'F', tray));
+//  }
+//  
+//  @Test
+//  public void testIsNeighborWhenFalse(){
+//	  BoggleTray bt = new BoggleTray(tray);
+//	  assertFalse(bt.isNeighbor('A', 'C', tray));
+//  }
+//
+//  @Test
+//  public void testFind(){
+//	  BoggleTray bt = new BoggleTray(tray);
+//	  assertTrue(bt.find(0,0,"A", tray));
+//  }
 
   // More tests will be necessary
 

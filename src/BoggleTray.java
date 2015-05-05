@@ -1,138 +1,170 @@
-// by Irene Moreno and Ruby Abrams
+/**
+ * This class represents one part of the Boggle, a word game designed by Allan Turoff
+ * and trademarked by Parker Brothers and Hasbro. 
+ * 
+ * The game of Boggle has a dice tray that can hold 16 dice that can be "rolled" to 
+ * generate a random collection of 16 letters. Each six- sided die has letters from 
+ * which players try to find words. Words are possible if letters line up next to 
+ * each other horizontally, vertically, or diagonally without being reused. 
+ * There are 3 letters that can be connected to any letter on a corner, 
+ * 5 for the six letters on the borders and 8 for the middle four letters 
+ * (there is no wraparound).
+ * 
+ * @author Rick Mercer
+ */
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+//Ruby Abrams and Irene Moreno
 public class BoggleTray {
-	private char[][] tray;
 
-	// Constructor takes a 2D array of characters that represents the
-	// Boggle BoggleTray with 16 dice already rolled in a known fixed state.
-	public BoggleTray(char[][] array) {
-		tray = new char[4][4];
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				tray[i][j] = array[i][j];
-			}
-		}
+  private char[][] path;
+  private char[][] board;
+  public static final char TRIED = '@';
+  public static final char PART_OF_WORD = '!';
+  private String attempt;
+  private int index;
+  public static final int SIZE = 4;
+  public static final int NUMBER_SIDES = 6;
 
-		// stack = new Stack<Character>(); //not needed anymore
-	}
+  // 4x4 Boggle includes 16 dice with the character indicated here (except Q
+  // would be Qu). Each string element has six letters for the six sides of the
+  // die.
+  String[] dice = { "LRYTTE", "VTHRWE", "EGHWNE", "OBBAOJ", 
+		  			"SEOTIS", "ANAEEG", "IDSYTT","OATTOW", 
+		  			"MTOICU", "AFPKFS", "XLDERI", "HCPOAS", 
+		  			"ENSIEU", "YLDEVR","ZNRNHL", "NMIQHU" };
 
-	// Return true if str is found in the Boggle BoggleTray according to Boggle
-	// rules.
-	// Note: This method does NOT check to see if the word is in the list of
-	// words.
-	public boolean foundInBoggleTray(String str) {
-		char[][] temp = new char[4][4];
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				temp[i][j] = tray[i][j];
-			}
-		}
-		str = str.toUpperCase();
-		int i = 0;
-		int j = 0;
-		if (str.length() == 0)
-			return false;
-		while (i < 4) {
-			j = 0;
-			while (j < 4) { // iterate through the [][]array
-				if (temp[i][j] == str.charAt(0))
-					if (find(i, j, str, temp))
-						return true;
-				j++;
-			}
-			i++;
-		}
-		return false;
-	}
+  private ArrayList<String> randomDice;
 
-	// this method will tell us if the entire string (ref) is
-	// found in the [][] array
-	public boolean find(int i, int j, String ref, char[][] board) {
-		char[][] temp = new char[4][4];
-		for (int r = 0; r < 4; r++) {
-			for (int c = 0; c < 4; c++) {
-				temp[r][c] = board[r][c];
-			}
-		}
-		if (ref.length() == 0) {
-			board = tray;
-			return true;
-		}
-		if (i == -1 || j == -1)
-			return false;
-		char letter = board[i][j];
-		if (letter == 'Q')
-			return find(i, j, ref.substring(1), board);
-		if (ref.length() == 1) {
-			return true;
-		}
-		if (ref.charAt(0) == letter) { // the position of the first
-		// character
-			if (isNeighbor(letter, ref.charAt(1), board)) { // check to see if
-			// the
-			// second character
-			// is a neighbor
-				board[i][j] = ' '; // change to blank space
-				i = row(ref.substring(1), board);
-				j = col(ref.substring(1), board);
-				return find(i, j, ref.substring(1), board);
-			}
-		}// else position of first character is not found:
-		return false;
-	}
+  private static Random generator;
 
-	private int col(String l, char[][] temp) { // returning col position of l
-		char letter = l.charAt(0);
-		for (int i = 0; i < temp.length; i++)
-			for (int j = 0; j < temp[0].length; j++) {
-				if (temp[i][j] == letter) {
-					return j;
-				}
-			}
-		return -1; // should not return this.. we know it already exists
-	}
+  public BoggleTray() {
+    randomDice = new ArrayList<String>();
+    for (int die = 0; die < SIZE * SIZE; die++)
+      randomDice.add(dice[die]);
 
-	private int row(String l, char[][] temp) { // return row position of l
-		char letter = l.charAt(0);
-		for (int i = 0; i < temp.length; i++)
-			for (int j = 0; j < temp[0].length; j++) {
-				if (temp[i][j] == letter) {
-					return i;
-				}
-			}
-		return -1; // should not return this.. we know it already exists
-	}
+    generator = new Random();
+    board = getRandomizedDiceArray();
+  }
 
-	// will return true if first and next are neighbors on board
-	// TESTED: this works too
-	public boolean isNeighbor(char first, char next, char[][] board) {
-		for (int row = 0; row < board.length; row++) {
-			for (int col = 0; col < board[0].length; col++) {
-				for (int i = row - 1; i < row + 2 && i < board.length; i++) {
-					for (int j = col - 1; j < col + 2 && j < board[0].length; j++) {
-						if (i >= 0 && j >= 0) {
-							if (board[i][j] == next && board[row][col] == first) {
-								return true;
-							}
-						}
+  public BoggleTray(char[][] newBoard) {
+    board = newBoard;
+  }
 
-					}
+  @Override
+  public String toString() {
+    String result = "\n";
+    for (int r = 0; r < SIZE; r++) {
+      for (int c = 0; c < SIZE; c++) {
+        if (board[r][c] == 'Q')
+          result += " Qu";
+        else
+          result += "  " + board[r][c];
+      }
+      result += " \n\n";
+    }
+    return result;
+  }
 
-				}
+  /**
+   * Return true if search is word that can found on the board following the
+   * rules of Boggle
+   * 
+   * @param search
+   *          A word that may be in the board by connecting consecutive letters
+   * @return True if search is found
+   */
+  public boolean foundInBoggleTray(String search) {
+    attempt = search.toUpperCase().trim();
+    boolean found = false;
+    for (int r = 0; r < SIZE; r++) {
+      for (int c = 0; c < SIZE; c++)
+        if (board[r][c] == attempt.charAt(0)) {
+          init();
+          found = check(r, c);
+          if (found) {
+            return true;
+          }
+        }
+    }
+    return found;
+  }
 
-			}
-		}
-		return false;
-	}
+  private void init() {
+    path = new char[SIZE][SIZE];
+    for (int r = 0; r < SIZE; r++)
+      for (int c = 0; c < SIZE; c++)
+        path[r][c] = '.';
+    index = 0;
+  }
 
-	public String toString() {
-		String result = "";
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				result += "" + tray[i][j];
-			}
-			result += "\n";
-		}
-		return result;
-	}
+  private boolean check(int r, int c) {
+    boolean found = false;
+    if (valid(r, c)) {
+      path[r][c] = TRIED;
+      if (board[r][c] == attempt.charAt(index)) {
+        if (board[r][c] == 'Q')
+          index += 2;
+        else
+          index++;
+      }
 
+      if (index >= attempt.length())
+        found = true;
+      else {
+        found = check(r - 1, c - 1);
+        if (!found)
+          found = check(r - 1, c);
+        if (!found)
+          found = check(r - 1, c + 1);
+        if (!found)
+          found = check(r, c - 1);
+        if (!found)
+          found = check(r, c + 1);
+        if (!found)
+          found = check(r + 1, c - 1);
+        if (!found)
+          found = check(r + 1, c);
+        if (!found)
+          found = check(r + 1, c + 1);
+        // If still not found, allow backtracking to seeds the same letter in a
+        // different location later as in looking for foot in this board
+        // ....
+        // ..T.
+        // ..O.
+        // .FO.
+        if (!found) {
+          path[r][c] = '.';
+          index--;
+        }
+      }
+      if (found) {
+        // Mark where the letter was found, not required, but could be used to
+        // show the actual path of the word that was found.
+        path[r][c] = board[r][c];
+      }
+    }
+    return found;
+  }
+
+  private boolean valid(int r, int c) {
+    return r >= 0 && r < SIZE && c >= 0 && c < SIZE && path[r][c] != TRIED
+        && board[r][c] == attempt.charAt(index);
+  }
+
+  public char[][] getRandomizedDiceArray() {
+    // Get the SIZE*SIZE dice in a different random order
+    char[][] randomBoard = new char[4][4];
+    Collections.shuffle(randomDice);
+    int dieNumber = 0;
+    for (int r = 0; r < SIZE; r++)
+      for (int c = 0; c < SIZE; c++) {
+        String s = randomDice.get(dieNumber);
+        char letterToPlace = s.charAt(generator.nextInt(NUMBER_SIDES));
+        randomBoard[r][c] = letterToPlace;
+        dieNumber++;
+      }
+    return randomBoard;
+  }
 }
