@@ -153,4 +153,14 @@ public class Boggle {
 		//System.out.println(correct.toString());
 		return score;
 	}
+	
+	public String toString(List<String> list) {
+		String result = "";
+		for (int i = 0; i < list.size(); i++) {
+		result += list.get(i) + " ";
+		if (i%10 == 0 && i != 0)
+		result += "\n";
+		}
+		return result;
+		}
 }
